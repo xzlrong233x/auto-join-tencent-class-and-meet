@@ -55,7 +55,7 @@ class ControlGUI:
                         try: self.ToastRemind.show_toast('定向腾讯会议','请暂且不要操作电脑\n进入码:%s'%(EnterCode),duration=10,icon_path=None,threaded=True)
                         except: pass
                     #启动线程
-                    meetingStart = threading.Thread(target=self.meetctrl.ToStartMeeting(meetingCode=EnterCode))
+                    meetingStart = threading.Thread(target=self.meetctrl.ToStartMeeting(meetingCode=EnterCode,stopWait=checkListContent(self.getTime,self.plansDict)))
                     meetingStart.start()
                     self.startReireThread()
                     return None
@@ -91,7 +91,7 @@ class ControlGUI:
             
         self.timelist = list(self.plansDict.keys())
         self.timelist.sort()
-        self.getTime = checkListContent(self.GetcloserTime(),self.timelist,self.plansDict)
+        self.getTime = self.GetcloserTime()
         try:
             self.closerPlanStr.set('时间:%s\n进入码:%s'%(self.getTime,self.plansDict[self.getTime]))
         except:
