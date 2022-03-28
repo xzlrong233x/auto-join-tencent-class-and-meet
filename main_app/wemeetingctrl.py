@@ -26,6 +26,7 @@ class TxMeetingAutoControl(WindowControl):
         win32gui.SetWindowPos(self.MainHandel, win32con.HWND_NOTOPMOST, 0,0,0,0,win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
         pyautogui.click()
         #join and type name
+        time.sleep(3)#等待前一个会议码出现
         pyautogui.typewrite(str(meetingCode),interval=0.05)
         if PlanConfig['MeetingJoinName'] is not None:
             pyautogui.moveTo(PlanConfig['MeetingNameClickX'],PlanConfig['MeetingNameClickY'],duration=0.3)
