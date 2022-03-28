@@ -55,31 +55,25 @@ def plans_info_get():
             pass
     return(tojoinmeeting)
 
-def checkListContent(checkindex=None,checklist :list=None,checkdict :dict=None,checknum=1):
-    '''在列表或字典的一定范围内检查是否有相同的索引,是则返回下一个索引\n
+def checkListContent(checkindex=None,checkdict :dict=None,checknum=-1):
+    '''在字典的一定范围内检查是否有相同的索引\n
     :checkindex: 检查的索引
-    :checklist: 一起检查的列表
     :checkdict: 一起检查的字典'''
     try:
-        if checklist.index(checkindex) >= checknum:
-            if checkdict is None and checklist[checklist.index(checkindex)-checknum] == checkindex:
-                return checklist[checklist.index(checkindex)+checknum]
-            elif checkdict[checklist[checklist.index(checkindex)-checknum]] == checkdict[checkindex]:
-                return checklist[checklist.index(checkindex)+checknum]
-    except IndexError:
-        return None
-    except:
-        pass
-    return checkindex
+        checklist = list(checkdict.keys())
+        checkindexnum = checklist.index(checkindex)
+        if checklist.index(checkindex) >= abs(checknum):
+            if checkdict is not None and checkdict[checklist[checkindexnum+checknum]] == checkdict[checkindex]:
+                return True
+    except: pass
+    return False
 
 def closerTimeCheck(todotime):
     '''check if the time is closer
     检查时间是否与目前接近'''
     hour = int(todotime[0:2])
     min = int(todotime[3:])
-    if hour > int(time.strftime('%H')):
-        return True
-    elif hour == int(time.strftime('%H')) and min > int(time.strftime('%M')):
+    if hour > int(time.strftime('%H')) or hour == int(time.strftime('%H')) and min > int(time.strftime('%M')):
         return True
     else:
         return False
