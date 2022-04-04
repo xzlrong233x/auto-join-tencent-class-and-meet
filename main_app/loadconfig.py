@@ -9,6 +9,7 @@ DeBug: 还不知道用来做什么
 LoadXlsxEnable: 是否默认通过xlsx文件加载计划
 WebEnable: 是否启用浏览器,如果为False将不会进行与腾讯课堂相关的操作
 ClassAutoClickLogin: 是否在无法加载cookies时启用自动登录,目前只支持自动QQ登录
+UseProtocolJoinMeeting: 是否使用腾讯会议的协议进入会议 原本的键盘鼠标操作不会消失可通过调整这个设置是否启用(懒得删.jpg)
 LoginClickX: 以屏幕为参照物,自动登录点击的X坐标(默认值是在分辨率为1920x1080下)
 LoginClickY: 自动登录点击的Y坐标
 GourlTimeoutSec: 如果这节课未下课将等待的时间
@@ -27,6 +28,7 @@ if not os.path.exists(r'plan_config.json'):
     'LoadXlsxEnable': False, 
     'WebEnable': True, 
     'ClassAutoClickLogin': True,
+    'UseProtocolJoinMeeting': True,
     'LoginClickX': 700, 
     'LoginClickY': 600, 
     'GourlTimeoutSec': 360, 
