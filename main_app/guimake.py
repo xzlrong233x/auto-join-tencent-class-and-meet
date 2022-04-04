@@ -16,7 +16,7 @@ class ControlGUI:
         self.MainWindow.geometry('420x240')
         self.MainWindow.resizable(0,0)
         self.meetctrl = TxMeetingAutoControl()
-        if PlanConfig['WebEnable']:
+        if PlanConfig['WebEnable']: 
             self.pagectrl = PageCtrl()
             self.pagectrl.login_ctrl()
         self.ToastRemind = ToastNotifier()
@@ -32,9 +32,11 @@ class ControlGUI:
     def CursorMove(self):
         '''move cursor every once in a while'''
         while True:
-            if self.IfCursorMove.get() == 1:
-                win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(1), int(1), 0, 0)
-            time.sleep(PlanConfig['CursorMoveWaitTime'])
+            try:
+                if self.IfCursorMove.get() == 1:
+                    win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(1), int(1), 0, 0)
+                time.sleep(PlanConfig['CursorMoveWaitTime'])
+            except:pass
     
     def GetcloserTime(self):
         '''package func to get closer time'''
@@ -166,7 +168,6 @@ class ControlGUI:
         SmallTools.add_checkbutton(variable=self.IfCursorMove,label='暂停锁屏')
         SmallTools.add_checkbutton(variable=self.IfToastRemind,label='开启通知')
         SmallTools.add_command(label='重载meetctrl',command=self.meetctrl.__init__)
-        SmallTools.add_command(label='查看详细情况',command=self.DeBugInfo)
         TopMenu.add_cascade(menu=SmallTools,label='小功能')
 
         LoadModeChoose = tkinter.Menu(TopMenu,tearoff=False)
@@ -176,6 +177,7 @@ class ControlGUI:
 
         if PlanConfig['DeBug']:
             DeBugMenu = tkinter.Menu(TopMenu,tearoff=False)
+            DeBugMenu.add_command(label='查看详细情况',command=self.DeBugInfo) #不会有人认真看吧
             TopMenu.add_cascade(menu=DeBugMenu,label='DeBug')
 
         TopMenu.add_command(label='信息')
