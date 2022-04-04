@@ -12,6 +12,7 @@ DeBug: 还不知道用来做什么
 LoadXlsxEnable: 是否默认通过xlsx文件加载计划  
 WebEnable: 是否启用浏览器,如果为False将不会进行与腾讯课堂相关的操作  
 ClassAutoClickLogin: 是否在无法加载cookies时启用自动登录,目前只支持自动QQ登录  
+UseProtocolJoinMeeting: 是否使用腾讯会议的协议进入会议 原本的键盘鼠标操作不会消失可通过调整这个设置是否启用(懒得删.jpg)  
 LoginClickX: 以屏幕为参照物,自动登录点击的X坐标(默认值是在分辨率为1920x1080下)  
 LoginClickY: 自动登录点击的Y坐标  
 GourlTimeoutSec: 如果这节课未下课将等待的时间  
@@ -30,6 +31,8 @@ CursorMoveWaitTime: 每次鼠标运动间隔的时间
 如果您配置文件中的ClassAutoClickLogin为true的话将会点击(LoginClickX,LoginClickY)在屏幕中位置
 注：cookies将会录入在目录下的login_cookies.json文件中，如果您发现登录信息过期的话请删除该文件
 
+## 2.3 腾讯会议
+程序1.1版采用腾讯会议自带的 wemeet:// 协议进入会议，之前的键鼠操作没有删除，可调设置改回（就是我不想删，反正不影响）
 # 3 计划文件
 ## 3.1 JSON加载
 JSON文件有示例不难理解  
@@ -51,7 +54,7 @@ xlsx文件中有效读取区中的值都在xlsx_keys.json中有所对应
 腾讯课堂集成了自动签到  
 重载是给你应对腾讯会议突然崩了的情况  
 开启通知可能不起作用（作者本人的弹不出来）  
-定向线程会将int值看作为腾讯会议的会议码 将前27个字符为https://ke.qq.com/webcourse 的字符串作为腾讯课堂的课堂url  
+定向线程会将int值看作为腾讯会议的会议码 将前27个字符为 https://ke.qq.com/webcourse 的字符串作为腾讯课堂的课堂url  
 刷新是刷给你看的不会改变已创建的定向线程  
 会优化的，等我再咕一咕  
 ## 4.2
