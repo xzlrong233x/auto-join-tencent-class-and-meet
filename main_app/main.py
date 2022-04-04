@@ -3,6 +3,7 @@
 #运行源文件需pywin32 pyautogui helium selenium openpyxl win10toast库
 #author: xlr_233
 #from: https://github.com/xzlrong233x/auto-join-tencent-class-and-meet/
+#version: 1.1
 from guimake import ControlGUI
 
 if __name__ == '__main__':
