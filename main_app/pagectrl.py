@@ -16,7 +16,7 @@ class PageCtrl:
     def login_ctrl(self):  #登录，尝试读取login_cookies.json中的cookies，如果失败会根据配置进行手动或自动登录
         __SaveCookiesFilePath = r'login_cookies.json'
         try:
-            with open(__SaveCookiesFilePath,'r+',encoding='utf-8') as f: GotCookies = json.loads(f.read())
+            with open(__SaveCookiesFilePath,'a+',encoding='utf-8') as f: GotCookies = json.loads(f.read())
             for cookie in GotCookies:
                 self.dirver.add_cookie(cookie)
         except Exception as err:
