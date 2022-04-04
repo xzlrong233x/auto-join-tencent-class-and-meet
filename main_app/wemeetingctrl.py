@@ -1,6 +1,7 @@
 '''
 重点优化模块
 '''
+import os
 import threading
 import time
 
@@ -11,8 +12,7 @@ from windowcontrol import *
 
 class TxMeetingAutoControl(WindowControl):
     def __init__(self):
-        try: self.MainHandel = self.GetWindowHwnd(winName='腾讯会议',index=-1)
-        except: self.MainHandel = 0
+        self.MainHandel = self.GetWindowHwnd(winName='腾讯会议',index=-1)
         if self.MainHandel == 0:
             pyautogui.alert(text='请打开腾讯会议',title='无法寻找到腾讯会议',button='OK')
             self.__init__()
@@ -26,7 +26,7 @@ class TxMeetingAutoControl(WindowControl):
         win32gui.SetWindowPos(self.MainHandel, win32con.HWND_NOTOPMOST, 0,0,0,0,win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
         pyautogui.click()
         #join and type name
-        time.sleep(3)#等待前一个会议码出现
+        time.sleep(3)
         pyautogui.typewrite(str(meetingCode),interval=0.05)
         if PlanConfig['MeetingJoinName'] is not None:
             pyautogui.moveTo(PlanConfig['MeetingNameClickX'],PlanConfig['MeetingNameClickY'],duration=0.3)
@@ -38,9 +38,12 @@ class TxMeetingAutoControl(WindowControl):
 
     def Join(self,meetingCode):
         '''function to show window and join meeting'''
-        self.ShowWindow(self.MainHandel)
-        win32gui.SetWindowPos(self.MainHandel, win32con.HWND_TOPMOST, 0,0,0,0,win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
-        self.ClickJoin(meetingCode)
+        if not PlanConfig['UseProtocolJoinMeeting']:
+            self.ShowWindow(self.MainHandel)
+            win32gui.SetWindowPos(self.MainHandel, win32con.HWND_TOPMOST, 0,0,0,0,win32con.SWP_NOMOVE | win32con.SWP_NOSIZE)
+            self.ClickJoin(meetingCode)
+        else:
+            os.system('start wemeet://page/inmeeting?meeting_code=%s^&rs=17'%(str(meetingCode)))
 
     def CloseMeeting(self,hwnd):
         '''close meeting'''
@@ -63,9 +66,9 @@ class TxMeetingAutoControl(WindowControl):
             frequency -= 1
             time.sleep(1)
 
-    def ToStartMeeting(self,meetingCode):
+    def ToStartMeeting(self,meetingCode,stopWait=False):
         '''check if the time is compliant'''
-        if win32gui.FindWindow(None,'腾讯会议') != self.MainHandel:
+        if win32gui.FindWindow(None,'腾讯会议') != self.MainHandel and not stopWait:
             self.runWait = threading.Thread(target=self.waitMeetingEnd,args=(meetingCode,PlanConfig['MeetingCloseWaitTime']),name='WaitThread')
             self.runWait.start()
             return None
