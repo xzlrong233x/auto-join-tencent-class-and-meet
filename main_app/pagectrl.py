@@ -3,23 +3,24 @@ import helium
 import selenium
 import time
 import pyautogui
+import threading
 import win32api,win32con
 from loadconfig import PlanConfig
 
 class PageCtrl:
     '''open browser and to go to classes'''
     def __init__(self):
-        self.dirver = helium.start_chrome()
+        self.dirver = helium.start_chrome('ke.qq.com')
         self.__tempVar = 0
 
     def login_ctrl(self):  #登录，尝试读取login_cookies.json中的cookies，如果失败会根据配置进行手动或自动登录
         __SaveCookiesFilePath = r'login_cookies.json'
-        helium.go_to('ke.qq.com')
         try:
             with open(__SaveCookiesFilePath,'r+',encoding='utf-8') as f: GotCookies = json.loads(f.read())
             for cookie in GotCookies:
                 self.dirver.add_cookie(cookie)
-        except:
+        except Exception as err:
+            print(err)
             helium.click(helium.Text('登录'))
             if PlanConfig['ClassAutoClickLogin']:
                 time.sleep(5)
@@ -30,7 +31,7 @@ class PageCtrl:
             time.sleep(10)
             DictCookies = self.dirver.get_cookies()
             SaveCookies = json.dumps(DictCookies)
-            with open(__SaveCookiesFilePath,'a+',encoding='utf-8') as f:
+            with open(__SaveCookiesFilePath,'w+',encoding='utf-8') as f:
                 f.write(SaveCookies)
         helium.refresh()
 
@@ -42,7 +43,8 @@ class PageCtrl:
                 helium.go_to(gourl)
             except: helium.go_to(gourl)
         elif self.__tempVar == 0:
-            helium.go_to(gourl)
+            try: helium.go_to(gourl)
+            except: return self.go_url(gourl)
             self.__tempVar = 1
 
     def check_boutton_and_click(self,sleepTime=2): #点击签到按钮
@@ -54,4 +56,8 @@ class PageCtrl:
             time.sleep(sleepTime)
 
     def exit(self):
-        helium.kill_browser()
+        killThread = threading.Thread(target=lambda: helium.kill_browser())
+        killThread.start()
+
+if __name__ == '__main__':
+    testweb = PageCtrl()
