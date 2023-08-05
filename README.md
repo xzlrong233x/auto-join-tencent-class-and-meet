@@ -1,6 +1,6 @@
 # auto-join-tencent-class-and-meet
 计划性的进入腾讯课堂（网页）或腾讯会议（软件）  
-第一次写不够成熟
+目前仅支持Windows系统
 # 1 准备
 在运行源码前请确保安装了pywin32 pyautogui helium selenium openpyxl 等库  
 当然，到时候我也许会去打包一下
