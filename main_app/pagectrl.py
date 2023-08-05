@@ -10,13 +10,18 @@ from loadconfig import PlanConfig
 class PageCtrl:
     '''open browser and to go to classes'''
     def __init__(self):
-        self.dirver = helium.start_chrome('ke.qq.com')
+        try:
+            self.dirver = helium.start_chrome('ke.qq.com')
+        except Exception as e:
+            win32api.MessageBox(0,"chrome启动失败，请检查chrome驱动版本\n错误如下:\n"+e,"浏览器启动失败",0,0)
+            self.error = True
+        self.error = False
         self.__tempVar = 0
 
     def login_ctrl(self):  #登录，尝试读取login_cookies.json中的cookies，如果失败会根据配置进行手动或自动登录
         __SaveCookiesFilePath = r'login_cookies.json'
         try:
-            with open(__SaveCookiesFilePath,'a+',encoding='utf-8') as f: GotCookies = json.loads(f.read())
+            with open(__SaveCookiesFilePath,'r+',encoding='utf-8') as f: GotCookies = json.loads(f.read())
             for cookie in GotCookies:
                 self.dirver.add_cookie(cookie)
         except Exception as err:
@@ -35,7 +40,7 @@ class PageCtrl:
                 f.write(SaveCookies)
         helium.refresh()
 
-    def go_url(self,gourl):   #该函数的等待机制未有过多测试（一天就一节腾讯课堂的课
+    def go_url(self,gourl):   #该函数的等待机制未有过多测试（不上课了
         '''进入网站,如果未下课则等待一定时间,期间如下课则进入课堂,否则直接进入'''
         if self.__tempVar == 1:
             try:
@@ -56,8 +61,12 @@ class PageCtrl:
             time.sleep(sleepTime)
 
     def exit(self):
-        killThread = threading.Thread(target=lambda: helium.kill_browser())
-        killThread.start()
+        if (self.error):
+            del self
+            return None
+        else: 
+            killThread = threading.Thread(target=lambda: helium.kill_browser())
+            killThread.start()
 
 if __name__ == '__main__':
     testweb = PageCtrl()
